@@ -1,7 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'; 
 import { useId } from 'react'; 
 import clsx from 'clsx';
-import { nanoid } from 'nanoid';
 import { FaRegUser } from 'react-icons/fa';
 import { MdPhoneIphone } from "react-icons/md";
 import { HiInformationCircle } from 'react-icons/hi';
@@ -76,7 +75,7 @@ export default function ContactForm() {
   const handleSubmit = (values, actions) => {
     dispatch(
       addContact({
-        id: nanoid(),
+        // id: nanoid(),
         name: values.name,
         number: values.number,
       })

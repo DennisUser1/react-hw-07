@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import ContactForm from "components/ContactForm/ContactForm";
 import SearchBox from "components/SearchBox/SearchBox";
 import ContactList from "components/ContactList/ContactList";
@@ -7,6 +7,7 @@ import { FaChess } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux"; 
 import { addContact, deleteContact, undoDeleteContact } from "./redux/contactsSlice"; 
 import { selectContacts } from "./redux/contactsSlice"; 
+import { fetchContacts } from "./redux/contactsOps.js";
 import "./App.css";
 
 export default function App() {
@@ -14,6 +15,10 @@ export default function App() {
   const contacts = useSelector(selectContacts); 
   const noContacts = contacts.length == 0;   
   const deletedContact = useSelector(state => state.contacts.deletedContact); 
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleAddContact = (contact) => {
     dispatch(addContact(contact)); 
