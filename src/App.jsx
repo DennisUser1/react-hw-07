@@ -42,7 +42,7 @@ export default function App() {
   }, [isError]);
 
   const handleUndoDelete = () => {
-    dispatch(undoDeleteContact()); 
+    dispatch(undoDeleteContact(deletedContact)); 
   };
 
   return (
