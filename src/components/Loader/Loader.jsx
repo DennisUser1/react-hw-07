@@ -1,4 +1,4 @@
-import { HashLoader } from "react-loader-spinner";
+import { HashLoader } from "react-spinners";
 import styles from "./Loader.module.css";
 
 export default function Loader () {
@@ -8,10 +8,7 @@ export default function Loader () {
         height="80"
         width="80"
         color="#9381ff"
-        ariaLabel="hash-loading"
-        wrapperStyle={{}}
-        wrapperClass=""
-        visible={true}
+        aria-label="hash-loading"
       />
     </div>
   );

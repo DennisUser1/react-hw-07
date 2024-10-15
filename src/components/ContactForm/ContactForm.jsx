@@ -9,9 +9,8 @@ import 'tippy.js/dist/tippy.css';
 import 'flag-icon-css/css/flag-icons.css';
 import { validationContactSchema } from '../../helpers/contactSchema';
 import styles from './ContactForm.module.css';
-import React from 'react';
 import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps.js";
 
 const formatPhoneNumber = (value) => {
   const allowedCodes = ['+38', '+1', '+49', '+48', '+33'];
@@ -75,7 +74,6 @@ export default function ContactForm() {
   const handleSubmit = (values, actions) => {
     dispatch(
       addContact({
-        // id: nanoid(),
         name: values.name,
         number: values.number,
       })

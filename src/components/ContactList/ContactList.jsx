@@ -1,34 +1,46 @@
 import Contact from "../Contact/Contact";
 import styles from "./ContactList.module.css";
-import { selectContacts } from "../../redux/contactsSlice";
-import { selectNameFilter, selectNumberFilter } from "../../redux/filtersSlice"; 
+import {
+  selectFilteredContacts,
+  selectIsLoading,
+} from "../../redux/contactsSlice";
 import { useSelector } from "react-redux";
+import { FaChess } from "react-icons/fa";
 
 export default function ContactList() {
-    const contacts = useSelector(selectContacts);
-    const nameFilter = useSelector(selectNameFilter);
-    const numberFilter = useSelector(selectNumberFilter); 
-
-    const filteredContacts = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(nameFilter.toLowerCase()) && 
-      contact.number.includes(numberFilter) 
-    );
+  const filteredContacts = useSelector(selectFilteredContacts);
+  const isLoading = useSelector(selectIsLoading);
 
     return (
       <>
         <ul className={styles.contactsList}>
-          {filteredContacts.map(({ id, name, number }) => {
-            return (
-              <li className={styles.contactItem} key={id}>
-                <Contact
-                  id={id}
-                  name={name}
-                  number={number}
-                />
-              </li>
-            );
-          })}
+          {filteredContacts.length == 0 && !isLoading ? (
+            <div className="messageWrapper">
+              <div className="messageContentWrapper">
+                <FaChess className="messageIconInfo" size="16"/>
+                <p className="messageInfo">
+                  No contacts are available at the moment. 
+                  <br/> 
+                  Please, add some contacts to view them here.
+                </p>
+              </div>
+            </div>
+          ) : (
+            filteredContacts.map(({ id, name, number }) => {
+              return (
+                <li className={styles.contactItem} key={id}>
+                  <Contact
+                    id={id}
+                    name={name}
+                    number={number}
+                  />
+                </li>
+              );
+            })
+          )}
         </ul>
       </>
     );
 };
+
+

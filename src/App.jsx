@@ -3,11 +3,12 @@ import ContactForm from "components/ContactForm/ContactForm";
 import SearchBox from "components/SearchBox/SearchBox";
 import ContactList from "components/ContactList/ContactList";
 import { FaAddressBook } from "react-icons/fa";
-import { FaChess } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux"; 
-import { addContact, deleteContact, undoDeleteContact } from "./redux/contactsSlice"; 
-import { selectContacts } from "./redux/contactsSlice"; 
 import { fetchContacts } from "./redux/contactsOps.js";
+import { selectIsError, selectIsLoading, selectContacts, undoDeleteContact } from "./redux/contactsSlice.js";
+import Loader from "./components/Loader/Loader.jsx";
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 import "./App.css";
 
 export default function App() {
@@ -15,14 +16,29 @@ export default function App() {
   const contacts = useSelector(selectContacts); 
   const noContacts = contacts.length == 0;   
   const deletedContact = useSelector(state => state.contacts.deletedContact); 
+  const isLoading = useSelector(selectIsLoading);
+  const isError = useSelector(selectIsError);
 
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const handleAddContact = (contact) => {
-    dispatch(addContact(contact)); 
-  };
+  useEffect(() => {
+    if (isError) {
+      const screenWidth = window.innerWidth;
+
+      const toastPosition = screenWidth < 768 ? 'bottomCenter' : 'topRight'; 
+
+      iziToast.error({
+        title: 'Something went wrong...',
+        message: 'Please check your internet connection',
+        position: toastPosition,
+        timeout: 5000, 
+        progressBar: true, 
+        close: true, 
+      });
+    }
+  }, [isError]);
 
   const handleUndoDelete = () => {
     dispatch(undoDeleteContact()); 
@@ -32,8 +48,9 @@ export default function App() {
     <div className="cardBox">
       <FaAddressBook className="iconBook" />
       <h1 className="mainTitle">Phonebook</h1>
-      <ContactForm addContact={handleAddContact} /> 
+      <ContactForm /> 
       <SearchBox />
+      {isLoading && !isError && <Loader />}
       <div className="boxShadow">
         <div className="boxBackground">
           <div className={noContacts || !deletedContact ? "centeredTitleWrapper" : "subtitleWrapper"}>
@@ -45,21 +62,8 @@ export default function App() {
             )}
           </div>
         </div>
-        {noContacts ? (
-          <div className="messageWrapper">
-            <div className="messageContentWrapper">
-              <FaChess className="messageIconInfo" size="16"/>
-              <p className="messageInfo">
-                No contacts are available at the moment. 
-                <br/> 
-                Please, add some contacts to view them here.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <ContactList contacts={contacts} deleteContact={deleteContact} />
-        )}
+        <ContactList />
       </div>   
     </div> 
   );
-};
+}
