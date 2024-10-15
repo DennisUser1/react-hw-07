@@ -1,12 +1,11 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit"; 
-import { fetchContacts, addContact, deleteContact, restoreContact } from "./contactsOps.js";
-import { selectNameFilter } from "./filtersSlice";
+import { fetchContacts, addContact, deleteContact, undoDeleteContact } from "./contactsOps.js"; 
+import { selectNameFilter, selectNumberFilter } from "./filtersSlice.js";
 
 const initialState = {
   items: [],
   isLoading: false,
   isError: null,
-
   deletedContact: null,
   deletedContactIndex: null,
   wasLastDeleted: false,
@@ -15,22 +14,7 @@ const initialState = {
 const contactsSlice = createSlice({
   name: "contacts",
   initialState,
-  reducers: {
-    undoDeleteContact(state) {
-      if (state.deletedContact) {
-        const newItems = [...state.items];
-        if (state.wasLastDeleted) {
-          newItems.push(state.deletedContact);
-        } else {
-          newItems.splice(state.deletedContactIndex, 0, state.deletedContact);
-        }
-        state.items = newItems;
-        state.deletedContact = null;
-        state.deletedContactIndex = null;
-        state.wasLastDeleted = false;
-      }
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, (state) => {
@@ -39,7 +23,7 @@ const contactsSlice = createSlice({
       })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items = action.payload;
+        state.items = action.payload.reverse();
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.isLoading = false;
@@ -51,7 +35,7 @@ const contactsSlice = createSlice({
       })
       .addCase(addContact.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items.push(action.payload);
+        state.items.unshift(action.payload);
       })
       .addCase(addContact.rejected, (state, action) => {
         state.isLoading = false;
@@ -64,7 +48,6 @@ const contactsSlice = createSlice({
       .addCase(deleteContact.fulfilled, (state, action) => {
         const indexToDelete = state.items.findIndex(contact => contact.id == action.payload);
         if (indexToDelete == -1) {
-          console.error("Contact not found for deletion:", action.payload);
           return;
         }
         const contactToDelete = state.items[indexToDelete];
@@ -82,26 +65,34 @@ const contactsSlice = createSlice({
         state.isLoading = false;
         state.isError = action.payload;
       })
-      .addCase(restoreContact.fulfilled, (state, action) => {
-        state.items.push(action.payload); 
-        state.deletedContact = null; 
-        state.deletedContactIndex = null;
-        state.wasLastDeleted = false;
+      .addCase(undoDeleteContact.fulfilled, (state, action) => {
+        state.items.unshift(action.payload); 
+        state.deletedContact = null;
+        state.deletedContactIndex = null;   
+        state.wasLastDeleted = false; 
+      }) 
+      .addCase(undoDeleteContact.rejected, (state, action) => {
+        state.isError = action.payload; 
       });
   },
 });
 
-export const { undoDeleteContact } = contactsSlice.actions;
 export const selectContacts = (state) => state.contacts.items;
 export const selectIsError = (state) => state.contacts.isError;
 export const selectIsLoading = (state) => state.contacts.isLoading;
 
 export const selectFilteredContacts = createSelector(
-  [selectContacts, selectNameFilter],
-  (contacts, filter) => {
-    return contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+  [selectContacts, selectNameFilter, selectNumberFilter],
+  (contacts, nameFilter, numberFilter) => {
+    const nameFilterLower = nameFilter.toLowerCase();
+    const numberFilterLower = numberFilter.toLowerCase();
+
+    return contacts.filter((contact) => {
+      const matchesName = contact.name.toLowerCase().includes(nameFilterLower);
+      const matchesNumber = contact.number.toLowerCase().includes(numberFilterLower);
+      
+      return matchesName && matchesNumber;
+    });
   }
 );
 

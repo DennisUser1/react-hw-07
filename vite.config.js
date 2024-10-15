@@ -15,4 +15,7 @@ export default defineConfig({
       components: '/src/components',
     },
   },
+  optimizeDeps: {
+    include: ['react-icons'], 
+  },
 });

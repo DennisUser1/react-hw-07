@@ -7,7 +7,7 @@ import { HiInformationCircle } from 'react-icons/hi';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import 'flag-icon-css/css/flag-icons.css';
-import { validationContactSchema } from '../../helpers/contactSchema';
+import { validationContactSchema } from '../../helpers/contactSchema.js';
 import styles from './ContactForm.module.css';
 import { useDispatch } from "react-redux";
 import { addContact } from "../../redux/contactsOps.js";

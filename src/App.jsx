@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import ContactForm from "components/ContactForm/ContactForm";
 import SearchBox from "components/SearchBox/SearchBox";
 import ContactList from "components/ContactList/ContactList";
+import ScrollTopBtn from "components/ScrollTopBtn/ScrollTopBtn";
 import { FaAddressBook } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux"; 
-import { fetchContacts } from "./redux/contactsOps.js";
-import { selectIsError, selectIsLoading, selectContacts, undoDeleteContact } from "./redux/contactsSlice.js";
+import { fetchContacts, undoDeleteContact } from "./redux/contactsOps.js";
+import { selectIsError, selectIsLoading, selectContacts } from "./redux/contactsSlice.js";
 import Loader from "./components/Loader/Loader.jsx";
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
@@ -63,7 +64,8 @@ export default function App() {
           </div>
         </div>
         <ContactList />
-      </div>   
+      </div>  
+      <ScrollTopBtn /> 
     </div> 
   );
-}
+};

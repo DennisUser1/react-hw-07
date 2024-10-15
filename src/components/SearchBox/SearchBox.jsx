@@ -2,7 +2,7 @@ import { useId } from "react";
 import { FaSistrix } from 'react-icons/fa';
 import styles from "./SearchBox.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { changeNameFilter, changeNumberFilter, selectNameFilter, selectNumberFilter } from "../../redux/filtersSlice";
+import { changeNameFilter, changeNumberFilter, selectNameFilter, selectNumberFilter } from "../../redux/filtersSlice.js";
 
 export default function SearchBox() {
   const dispatch = useDispatch();

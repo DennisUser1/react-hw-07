@@ -3,7 +3,7 @@ import styles from "./ContactList.module.css";
 import {
   selectFilteredContacts,
   selectIsLoading,
-} from "../../redux/contactsSlice";
+} from "../../redux/contactsSlice.js";
 import { useSelector } from "react-redux";
 import { FaChess } from "react-icons/fa";
 

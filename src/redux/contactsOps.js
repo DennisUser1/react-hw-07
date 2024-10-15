@@ -39,8 +39,8 @@ export const deleteContact = createAsyncThunk(
     }
 );
 
-export const restoreContact = createAsyncThunk(
-    "contacts/restoreContact",
+export const undoDeleteContact = createAsyncThunk(
+    "contacts/undoContact",
     async (contact, thunkAPI) => {
         try {
             const response = await axios.post("/contacts", contact); 

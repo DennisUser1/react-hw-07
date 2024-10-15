@@ -21,6 +21,8 @@
     font-size: 15.5px;
     width: 185px;
     transition: color 0.25s ease-in-out;
+    color: #6e57f4;
+    font-weight: 500;
 }
 
 .iconCardWrapper {
