@@ -1,7 +1,8 @@
-body, html {
-    overflow-x: hidden;
+body,
+html {
+  overflow-x: hidden;
 }
-  
+
 h1,
 h2,
 h3,
@@ -18,6 +19,7 @@ ol {
   padding-left: 0;
   margin: 0;
 }
+
 button {
   padding: 0;
   border: none;
@@ -26,7 +28,14 @@ button {
   background-color: transparent;
   cursor: pointer;
 }
+
 a {
   text-decoration: none;
   color: inherit;
+}
+
+svg {
+  margin: 0;
+  padding: 0;
+  display: block;
 }

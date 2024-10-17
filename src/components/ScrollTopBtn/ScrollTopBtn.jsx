@@ -1,35 +1,39 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./ScrollTopBtn.module.css";
 import { GrUpgrade } from "react-icons/gr";
+import { setVisible, setIsOnClick } from "../../redux/scrollActions.js"; 
 
 const ScrollTopBtn = () => {
-  const [visible, setVisible] = useState(false);
-  const [isOnClick, setIsOnClick] = useState(false);
+
+  const dispatch = useDispatch();
+  const visible = useSelector((state) => state.scroll.visible);
+  const isOnClick = useSelector((state) => state.scroll.isOnClick);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100 && !isOnClick) {
-        setVisible(true);
+      if (window.scrollY > 100 && ! isOnClick) {
+        dispatch(setVisible(true));
       } else {
-        setVisible(false);
+        dispatch(setVisible(false));
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isOnClick]);
+  }, [dispatch, isOnClick]);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setVisible(false);
-    setIsOnClick(true);
-    setTimeout(() => setIsOnClick(false), 1000);
+  const ScrollToTop = () => {
+    window.scrollTo({top: 0, behavior: "smooth"});
+    dispatch(setVisible(false));
+    dispatch(setIsOnClick(true));
+    setTimeout(() => dispatch(setIsOnClick(false)), 1000);
   };
 
   return (
     <>
       {visible && (
-        <button type="button" className={styles.scrollBtn} onClick={scrollToTop}>
+        <button type="button" className={styles.scrollBtn} onClick={ScrollToTop}>
           <GrUpgrade className={styles.icon} />
         </button>
       )}

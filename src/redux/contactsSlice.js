@@ -67,6 +67,15 @@ const contactsSlice = createSlice({
       })
       .addCase(undoDeleteContact.fulfilled, (state, action) => {
         state.items.unshift(action.payload); 
+
+        if (state.deletedContactIndex !== null && state.deletedContactIndex !== undefined) {
+          const restoredContact = state.items.shift();
+          if (state.wasLastDeleted && state.items.length > 0) {
+            state.items.splice(1, 0, restoredContact); 
+          } else {
+            state.items.splice(state.deletedContactIndex, 0, restoredContact);
+          }
+        }
         state.deletedContact = null;
         state.deletedContactIndex = null;   
         state.wasLastDeleted = false; 
