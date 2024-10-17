@@ -51,7 +51,6 @@ export default function App() {
       <h1 className="mainTitle">Phonebook</h1>
       <ContactForm /> 
       <SearchBox />
-      {isLoading && !isError && <Loader />}
       <div className="boxShadow">
         <div className="boxBackground">
           <div className={noContacts || !deletedContact ? "centeredTitleWrapper" : "subtitleWrapper"}>
@@ -64,6 +63,7 @@ export default function App() {
           </div>
         </div>
         <ContactList />
+        {isLoading && !isError && <Loader />}
       </div>  
       <ScrollTopBtn /> 
     </div> 

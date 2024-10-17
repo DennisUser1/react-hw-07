@@ -65,6 +65,10 @@ const contactsSlice = createSlice({
         state.isLoading = false;
         state.isError = action.payload;
       })
+      .addCase(undoDeleteContact.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+      })
       .addCase(undoDeleteContact.fulfilled, (state, action) => {
         state.items.unshift(action.payload); 
 
@@ -79,8 +83,10 @@ const contactsSlice = createSlice({
         state.deletedContact = null;
         state.deletedContactIndex = null;   
         state.wasLastDeleted = false; 
+        state.isLoading = false;
       }) 
       .addCase(undoDeleteContact.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = action.payload; 
       });
   },
